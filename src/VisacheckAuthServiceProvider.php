@@ -5,13 +5,13 @@ namespace Visacheck\Visacheck\LaravelAuth;
 
 use Hostville\Dorcas\LaravelCompat\Auth\VisacheckUser;
 use Hostville\Dorcas\LaravelCompat\Auth\VisacheckUserProvider;
+use Illuminate\Auth\AuthServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\ServiceProvider;
 use Visacheck\Visacheck\Sdk;
 
-class VisacheckAuthServiceProvider extends ServiceProvider
+class VisacheckAuthServiceProvider extends AuthServiceProvider
 {
     /**
      * Bootstrap required services
