@@ -1,6 +1,6 @@
 <?php
 
-namespace Hostville\Dorcas\LaravelCompat\Auth;
+namespace Visacheck\Visacheck\LaravelAuth\Auth;
 
 
 
