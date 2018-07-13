@@ -129,9 +129,11 @@ class VisacheckUserProvider implements UserProvider
         }
         $user = $response->getData();
         # get the actual user data
-        Cookie::queue('store_id', $user['id']);
+        $lifetimeMinutes = 24 * 60;
+        # the lifetime for the cache store, and cookie store
+        Cookie::queue('store_id', $user['id'], $lifetimeMinutes);
         # set the user id cookie
-        Cache::put('visacheck.auth_token.'.$user['id'], $token, 120);
+        Cache::put('visacheck.auth_token.'.$user['id'], $token, $lifetimeMinutes);
         # save the auth token to the cache
         return new VisacheckUser($user, $this->sdk);
     }
