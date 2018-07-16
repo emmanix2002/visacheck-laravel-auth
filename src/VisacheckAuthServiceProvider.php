@@ -25,7 +25,7 @@ class VisacheckAuthServiceProvider extends AuthServiceProvider
         
         // check if the Sdk has already been added to the container
         if (!$this->app->has(Sdk::class)) {
-            $tokenStoreId = Cookie::get('store_id');
+            $tokenStoreId = Cookie::get('visacheck_store_id');
             
             $this->app->singleton(Sdk::class, function ($app) use ($tokenStoreId) {
                 $token = !empty($tokenStoreId) ? Cache::get('visacheck.auth_token.'.$tokenStoreId, null) : null;
