@@ -137,6 +137,40 @@ class VisacheckUserProvider implements UserProvider
         # save the auth token to the cache
         return new VisacheckUser($user, $this->sdk);
     }
+    
+    /**
+     * Retrieve a user by the given email.
+     *
+     * @param array $credentials
+     *
+     * @return null|VisacheckUser
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function retrieveByEmailOnly(array $credentials)
+    {
+        $token = authorize_via_email_only($this->sdk, $credentials);
+        # we get the authentication token
+        if ($token instanceof VisacheckResponse) {
+            return null;
+        }
+        $this->sdk->setAuthorizationToken($token);
+        # set the authorization token
+        $service = $this->sdk->createProfileService();
+        $response = $service->addQueryArgument('include', 'company')->send('get');
+        if (!$response->isSuccessful()) {
+            return null;
+        }
+        $user = $response->getData();
+        # get the actual user data
+        $lifetimeMinutes = 24 * 60;
+        # the lifetime for the cache store, and cookie store
+        Cookie::queue('visacheck_store_id', $user['id'], $lifetimeMinutes);
+        # set the user id cookie
+        Cache::put('visacheck.auth_token.'.$user['id'], $token, $lifetimeMinutes);
+        # save the auth token to the cache
+        return new VisacheckUser($user, $this->sdk);
+        
+    }
 
     /**
      * Validate a user against the given credentials.
